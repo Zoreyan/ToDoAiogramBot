@@ -1,0 +1,38 @@
+
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - celery
+
+  redis:
+    image: redis:7
+
+  celery:
+    build: .
+    command: celery -A backend worker --loglevel=info
+    depends_on:
+      - redis
+    volumes:
+      - .:/app
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: todo_db
+      POSTGRES_USER: todo_user
+      POSTGRES_PASSWORD: todo_password
+    volumes:
+      - .:/app/db/var/lib/postgresql/data
+  bot:
+    build: .
+    command: python bot/main.py
+    depends_on:
+      - redis
+    volumes:
+      - .:/app

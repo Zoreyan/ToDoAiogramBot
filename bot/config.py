@@ -1,0 +1,5 @@
+
+
+BOT_TOKEN = '7824168828:AAFLkEqZYP2OuJdNbWonnTuBErDra6xhip4'
+
+BASE_URL = 'http://web:8000'
