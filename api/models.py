@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from django.utils.crypto import get_random_string
 
 
 class User(AbstractUser):
+    id = models.CharField(primary_key=True, max_length=16, default=lambda: get_random_string(16), editable=False)
     telegram_id = models.BigIntegerField(unique=True, null=True, blank=True)
 
     REQUIRED_FIELDS = []
@@ -11,6 +12,7 @@ class User(AbstractUser):
 
 
 class Category(models.Model):
+    id = models.CharField(primary_key=True, max_length=16, default=lambda: get_random_string(16), editable=False)
     title = models.CharField(max_length=40)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='categories')
 
@@ -23,6 +25,7 @@ class Category(models.Model):
 
 
 class Task(models.Model):
+    id = models.CharField(primary_key=True, max_length=16, default=lambda: get_random_string(16), editable=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='tasks', null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks')
     title = models.CharField(max_length=255)
